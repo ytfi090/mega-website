@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANTHER | MEGA PROJECT</title>
+    <title>ANTHER | MEGA PROJECT GATEWAY</title>
     <style>
         :root {
             --glow: #00f2ff;
             --accent: #7000ff;
             --bg: #050505;
+            --error: #ff3333;
             --glass: rgba(255, 255, 255, 0.05);
         }
 
@@ -18,11 +19,11 @@
             background-color: var(--bg);
             color: white;
             font-family: 'Inter', 'Segoe UI', sans-serif;
-            overflow-x: hidden;
+            overflow: hidden;
             height: 100vh;
         }
 
-        /* --- HOME PAGE SECTION --- */
+        /* --- STAGE 1: THE HOME PAGE --- */
         #home-page {
             height: 100vh;
             display: flex;
@@ -31,45 +32,47 @@
             justify-content: center;
             background: radial-gradient(circle at center, #111 0%, #050505 100%);
             transition: transform 1s cubic-bezier(0.85, 0, 0.15, 1), opacity 0.8s;
+            z-index: 2;
         }
 
         .hero-title {
-            font-size: 5rem;
-            letter-spacing: 15px;
+            font-size: clamp(3rem, 10vw, 6rem);
+            letter-spacing: 20px;
             text-transform: uppercase;
             background: linear-gradient(to right, #fff, var(--glow));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.3));
+            margin-bottom: 10px;
         }
 
         .hero-subtitle {
-            font-size: 1rem;
-            color: #888;
-            margin-bottom: 40px;
-            letter-spacing: 3px;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 50px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
         }
 
         .enter-btn {
-            padding: 15px 40px;
+            padding: 18px 50px;
             background: transparent;
             border: 1px solid var(--glow);
             color: var(--glow);
             text-transform: uppercase;
-            letter-spacing: 5px;
+            letter-spacing: 4px;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            font-weight: bold;
             transition: 0.4s;
+            border-radius: 4px;
         }
 
         .enter-btn:hover {
             background: var(--glow);
             color: black;
-            box-shadow: 0 0 30px var(--glow);
+            box-shadow: 0 0 40px var(--glow);
         }
 
-        /* --- ACCESS PAGE SECTION (HIDDEN INITIALLY) --- */
+        /* --- STAGE 2: THE ACCESS GATE --- */
         #access-page {
             position: fixed;
             inset: 0;
@@ -77,84 +80,156 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: black;
-            transform: translateY(100%); /* Start off-screen */
+            background: #000;
+            transform: translateY(100%); /* Hidden below */
             transition: transform 1s cubic-bezier(0.85, 0, 0.15, 1);
             z-index: 10;
         }
 
         .terminal-box {
-            width: 400px;
-            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            padding: 50px;
             background: var(--glass);
             border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 2px;
+            backdrop-filter: blur(15px);
             text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .terminal-box h3 {
+            letter-spacing: 3px;
+            font-weight: 300;
+            margin-bottom: 30px;
         }
 
         #pass-input {
             width: 100%;
             background: transparent;
             border: none;
-            border-bottom: 1px solid var(--glow);
+            border-bottom: 2px solid #333;
             color: var(--glow);
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             text-align: center;
-            margin-top: 20px;
             outline: none;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Courier New', monospace;
+            padding-bottom: 10px;
+            transition: border-color 0.4s;
         }
 
-        /* --- ANIMATION CLASSES --- */
-        .slide-up { transform: translateY(-100%) !important; opacity: 0; }
-        .active-access { transform: translateY(0%) !important; }
+        #pass-input:focus {
+            border-bottom-color: var(--glow);
+        }
 
+        .hint-text {
+            margin-top: 20px;
+            font-size: 0.7rem;
+            color: #444;
+            letter-spacing: 1px;
+        }
+
+        #status-msg {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            min-height: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* --- ANIMATIONS --- */
+        .slide-up { transform: translateY(-100%); opacity: 0; }
+        .active-access { transform: translateY(0%) !important; }
+        
+        .shake {
+            animation: shakeAnim 0.4s ease-in-out;
+        }
+
+        @keyframes shakeAnim {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .success-glow {
+            border-color: #00ff88 !important;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+        }
     </style>
 </head>
 <body>
 
     <section id="home-page">
         <h1 class="hero-title">ANTHER</h1>
-        <p class="hero-subtitle">OS DEMO • MOVIE HUB • TEAM CONTENT</p>
-        <button class="enter-btn" onclick="goToAccess()">Initiate Connection</button>
+        <p class="hero-subtitle">Digital Ecosystem // 2026</p>
+        <button class="enter-btn" onclick="initiateSystem()">Initiate Login</button>
     </section>
 
     <section id="access-page">
-        <div class="terminal-box">
-            <p style="color: #444; font-size: 0.8rem; margin-bottom: 10px;">[ ENCRYPTED CHANNEL ]</p>
-            <h3>IDENTITY REQUIRED</h3>
-            <input type="password" id="pass-input" placeholder="••••••••" maxlength="8">
-            <p id="error-log" style="color: red; font-size: 0.7rem; margin-top: 10px; min-height: 15px;"></p>
+        <div class="terminal-box" id="gate-box">
+            <p style="color: var(--glow); font-size: 0.7rem; margin-bottom: 5px;">[ SYSTEM ENCRYPTION ACTIVE ]</p>
+            <h3>ENTER ACCESS KEY</h3>
+            
+            <input type="password" id="pass-input" placeholder="••••••••" spellcheck="false" autocomplete="off">
+            
+            <div id="status-msg"></div>
+            <p class="hint-text">AUTHORIZED ACCESS ONLY</p>
         </div>
     </section>
 
     <script>
-        function goToAccess() {
+        const passInput = document.getElementById('pass-input');
+        const statusMsg = document.getElementById('status-msg');
+        const gateBox = document.getElementById('gate-box');
+
+        // Transition from Home to Access
+        function initiateSystem() {
             document.getElementById('home-page').classList.add('slide-up');
             document.getElementById('access-page').classList.add('active-access');
-            // Auto-focus the password field
-            setTimeout(() => {
-                document.getElementById('pass-input').focus();
-            }, 1000);
+            setTimeout(() => passInput.focus(), 1000);
         }
 
-        const passInput = document.getElementById('pass-input');
-        const errorLog = document.getElementById('error-log');
-
+        // Router Logic
         passInput.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') {
-                // We can set your specific access key here
-                if (passInput.value === 'ANTHER7') { 
-                    alert("ACCESS GRANTED. Welcome to the Hub.");
-                    // In the next phase, we'll redirect to the Dashboard
-                } else {
-                    errorLog.innerText = "INVALID KEY. ACCESS DENIED.";
-                    passInput.value = "";
-                    // Small shake animation could go here
+                const key = passInput.value;
+                
+                // Check keys
+                if (key === 'movies5000') {
+                    grantAccess("Movies.html");
+                } 
+                else if (key === 'Gems5000') {
+                    grantAccess("School.html");
+                } 
+                else if (key === 'V101') {
+                    grantAccess("SP.html");
+                } 
+                else {
+                    denyAccess();
                 }
             }
         });
+
+        function grantAccess(destination) {
+            gateBox.classList.add('success-glow');
+            statusMsg.style.color = "#00ff88";
+            statusMsg.innerText = "ACCESS GRANTED. REDIRECTING...";
+            
+            // Redirect after a short cinematic delay
+            setTimeout(() => {
+                window.location.href = destination;
+            }, 1200);
+        }
+
+        function denyAccess() {
+            gateBox.classList.add('shake');
+            statusMsg.style.color = "var(--error)";
+            statusMsg.innerText = "INVALID KEY. SYSTEM LOCKED.";
+            passInput.value = "";
+            
+            setTimeout(() => {
+                gateBox.classList.remove('shake');
+            }, 400);
+        }
     </script>
 </body>
 </html>
